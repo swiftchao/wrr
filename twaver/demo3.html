@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    * {
+        margin: 0;
+        border: 0;
+        padding: 0;
+    }
+    </style>
+</head>
+
+<body onload="init();">
+    <div id="main" style="position:relative;">
+    </div>
+</body>
+
+</html>
+<script src="./js/twaver.js"></script>
+<script>
+var box = new twaver.ElementBox();
+var network = new twaver.vector.Network(box);
+var width = document.documentElement.clientWidth;
+var height = document.documentElement.clientHeight;
+var autoLayouter = new twaver.layout.AutoLayouter(box);
+document.body.appendChild(network.getView());
+network.adjustBounds({x:0, y:0, width:1000, height:1000});
+
+function init() {
+    //registerImage()
+    initNetwork(); 
+}
+function initNetwork() {
+var data = [
+{"aNode":"5","zNode":"6"},
+{"aNode":"6","zNode":"7"},
+{"aNode":"7","zNode":"8"},
+{"aNode":"8","zNode":"9"},
+{"aNode":"9","zNode":"10"},
+{"aNode":"10","zNode":"11"},
+{"aNode":"8","zNode":"12"},
+{"aNode":"12","zNode":"13"},
+{"aNode":"13","zNode":"14"},
+{"aNode":"6","zNode":"1"},
+{"aNode":"7","zNode":"2"},
+{"aNode":"9","zNode":"3"},
+{"aNode":"10","zNode":"4"},
+{"aNode":"15","zNode":"8"},
+{"aNode":"16","zNode":"12"},
+{"aNode":"17","zNode":"13"},
+{"aNode":"18","zNode":"14"}
+];
+var nodeMap=[];
+    for (var i = 0, n = data.length; i < n; i++) {
+		var group="";
+		if(!nodeMap.hasOwnProperty(data[i]["aNode"])) {
+			group = new twaver.Node({name: '' + data[i]["aNode"]});
+			nodeMap[data[i]["aNode"]] = group;
+			box.add(group);
+		}else {
+			group = nodeMap[data[i]["aNode"]];
+		}
+		var node="";
+		if(!nodeMap.hasOwnProperty(data[i]["zNode"])) {
+			node = new twaver.Node({name: '' + data[i]["zNode"]});
+			nodeMap[data[i]["zNode"]] = node;
+			group.addChild(node); 
+			box.add(node);			
+		}else {
+			node = nodeMap[data[i]["zNode"]];
+		}
+		var link = new twaver.Link({name: ''}, group, node); 
+		group.addChild(link);
+		box.add(link);
+				
+	}
+	autoLayouter.doLayout('round');
+}
+</script>
